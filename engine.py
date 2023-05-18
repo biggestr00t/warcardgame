@@ -50,21 +50,26 @@ class GameEngine:
             playedCard = self.currentPlayer.play()
             previousCard = self.pile.getLastCardPlayed()
             if self.state == GameState.WARRING:
-                playedCard.setFaceDown()
-                self.currentPlayer.decreaseWarCount()
-            self.pile.addCard(playedCard)
+                if self.currentPlayer.warCount > 0: 
+                    playedCard.setFaceDown()
+                    self.currentPlayer.decreaseWarCount()
+                
             if self.state != GameState.WARRING or (self.player1.warCount == 0 and self.player2.warCount == 0):                
-                if previousCard is not None and  playedCard.value != previousCard.value:
-                #this is where war happens
+                if (previousCard is not None and  playedCard.value == previousCard.value):
                     self.state = GameState.WARRING
-                    self.player1.resetWarCount()
-                    self.player2.resetWarCount()                                              
-                    
-                #need more War logic
+
                 if previousCard is not None and playedCard.value > previousCard.value:
+                    self.state = GameState.PLAYING
                     self.roundWin(self.player1)
+                    self.player1.resetWarCount()
+                    self.player2.resetWarCount()  
                 elif previousCard is not None and playedCard.value > previousCard.value:
+                    self.state = GameState.PLAYING
                     self.roundWin(self.player2)
+                    self.player1.resetWarCount()
+                    self.player2.resetWarCount()
+                    
+            self.pile.addCard(playedCard)
             self.switchPlayer()
         if len(self.player1.hand) == 0:
             self.result = {"WINNER":self.player2}

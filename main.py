@@ -22,9 +22,18 @@ def renderGame(window):
     window.blit(text, (100, 500))
     text = font.render(str(len(gameEngine.player2.hand)) + " cards", True, (255, 255, 255))
     window.blit(text, (700, 500))
+    font = pygame.font.SysFont("comicsans", 30, True)
+    text = font.render("Game state is... " + str(gameEngine.state), True, (255, 255, 255))
+    window.blit(text, (100, 600))
+
+    text = font.render("current player war count... " + str(gameEngine.currentPlayer.warCount), True, (255, 255, 255))
+    window.blit(text, (200, 700))
     topCard = gameEngine.pile.getLastCardPlayed()
     if topCard != None:
-        window.blit(topCard.image,(400,200))
+        if (topCard.isFaceDown):
+            window.blit(cardBack, (400,200))
+        else: 
+            window.blit(topCard.image,(400,200))
     if gameEngine.state == GameState.WARRING:
         result = gameEngine.result
         #handle war stuff here

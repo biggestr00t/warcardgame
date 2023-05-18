@@ -76,6 +76,10 @@ class Player:
         self.hand.append(deck.deal())
     def play(self):
         return self.hand.pop(0)
+    def playFaceDown(self):
+        playedCard = self.hand.pop(0);
+        playedCard.setFaceDown();
+        return playedCard;
     
 
         
